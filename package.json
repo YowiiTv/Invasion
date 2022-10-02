@@ -1,0 +1,27 @@
+{
+  "name": "hi-threejs",
+  "version": "0.0.0",
+  "main": "index.js",
+  "type": "module",
+  "private": true,
+  "repository": "git@github.com:MaoDeMatos/hi-threejs.git",
+  "author": "Mao De Matos <mao.dematos@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "format": "prettier --write \"**/*.{ts,md}\""
+  },
+  "dependencies": {
+    "three": "^0.144.0"
+  },
+  "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^3.3.0",
+    "@types/node": "^18.7.21",
+    "@types/three": "^0.144.0",
+    "prettier": "^2.7.1",
+    "typescript": "^4.6.4",
+    "vite": "^3.1.0"
+  }
+}
