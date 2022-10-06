@@ -39,8 +39,8 @@ const camera = new THREE.PerspectiveCamera(
   0.01,
   500
 );
-camera.position.set(0, 0, 2);
-
+camera.position.set(0, 3, 5);
+camera.lookAt(new THREE.Vector3(0, 3, 0));
 // Rendering
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -48,7 +48,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.querySelector("#app").appendChild(renderer.domElement);
 
 // Camera controls
-const controls = new OrbitControls(camera, renderer.domElement);
+//const controls = new OrbitControls(camera, renderer.domElement);
 
 /**
  * Components
@@ -69,17 +69,29 @@ const planeMat = new THREE.MeshPhongMaterial({
   side: THREE.FrontSide,
 });
 const plane = new THREE.Mesh(planeGeo, planeMat);
-plane.rotation.x = Math.PI * -0.5;
-plane.position.y = -0.85;
+//plane.rotation.x = Math.PI * -0.5;
+plane.position.z = -2;
 scene.add(plane);
 
 // Player
+
+// Shoot class
+class Projectile extends THREE.Sprite {
+  constructor({ map, position, velocity = 0.1 }) {
+    super(map);
+    this.position.set(position.x, position.y, position.z);
+    this.velocity = velocity;
+  }
+  update() {
+    this.position.y += this.velocity;
+  }
+}
 // const playerTexture = textureLoader.load("airplane.png");
 // playerTexture.wrapS = THREE.RepeatWrapping;
 // playerTexture.wrapT = THREE.RepeatWrapping;
 // playerTexture.magFilter = THREE.NearestFilter;
 
-const map = textureLoader.load("airplane.png");
+const map = textureLoader.load("Redplane.png");
 const material = new THREE.SpriteMaterial({ map: map });
 
 const Player = new THREE.Sprite(material);
@@ -102,12 +114,50 @@ Player.position.set(0, -0.5, -2);
 // Player movement
 const xSpeed = 0.1;
 const ySpeed = 0.1;
+const projectiles = [];
+// const test = new Projectile({
+//   map: new THREE.SpriteMaterial({
+//     map: textureLoader.load("RedLaser.png"),
+//   }),
+//   position: Player.position,
+//   velocity: 1,
+// });
+
+// scene.add(test);
 
 document.addEventListener("keydown", onDocumentKeyDown);
-
+document.addEventListener("click", () => {
+  projectiles.push(
+    new Projectile({
+      map: new THREE.SpriteMaterial({
+        map: textureLoader.load("RedLaser.png"),
+      }),
+      position: Player.position,
+    })
+  );
+  scene.add(projectiles[projectiles.length - 1]);
+  const timeout = setTimeout(() => {
+    scene.remove(projectiles[0]);
+    projectiles.shift();
+  }, 2 * 1000);
+});
 function onDocumentKeyDown(event) {
   const keyCode = String(event.key).toLowerCase();
-  if (keyCode === " ") Player.position.set(0, -0.5, -2);
+  // if (keyCode === " ") {
+  //   projectiles.push(
+  //     new Projectile({
+  //       map: new THREE.SpriteMaterial({
+  //         map: textureLoader.load("RedLaser.png"),
+  //       }),
+  //       position: Player.position,
+  //     })
+  //   );
+  //   scene.add(projectiles[projectiles.length - 1]);
+  //   const timeout = setTimeout(() => {
+  //     scene.remove(projectiles[0]);
+  //     projectiles.shift();
+  //   }, 1 * 1000);
+  // }
 
   if (keyCode === "q" && Player.position.x > -3) Player.position.x -= xSpeed;
   if (keyCode === "d" && Player.position.x < 3) Player.position.x += xSpeed;
@@ -127,7 +177,10 @@ renderer.setAnimationLoop(render);
 function render(time) {
   // rotateMesh(defaultCube, time);
   stats.update();
-
+  for (let i = 0; i < projectiles.length; i++) {
+    const projectile = projectiles[i];
+    projectile.update();
+  }
   // controls.update();
   renderer.render(scene, camera);
 }
