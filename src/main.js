@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { Raycaster } from "three";
+import { Raycaster, Sprite } from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import Stats from "three/addons/libs/stats.module";
 
@@ -56,11 +56,11 @@ document.querySelector("#app").appendChild(renderer.domElement);
 const planeSize = 21;
 
 const planeTexture = textureLoader.load("background.png");
-planeTexture.wrapS = THREE.RepeatWrapping;
-planeTexture.wrapT = THREE.RepeatWrapping;
-planeTexture.magFilter = THREE.NearestFilter;
+// planeTexture.wrapS = THREE.RepeatWrapping;
+// planeTexture.wrapT = THREE.RepeatWrapping;
+// planeTexture.magFilter = THREE.NearestFilter;
 
-const repeats = planeSize;
+//const repeats = planeSize;
 //planeTexture.repeat.set(repeats, repeats);
 
 const planeGeo = new THREE.PlaneGeometry(planeSize, planeSize);
@@ -97,11 +97,39 @@ const material = new THREE.SpriteMaterial({ map: map });
 
 const Player = new THREE.Sprite(material);
 
-const raycaster = new THREE.Raycaster();
+//const raycaster = new THREE.Raycaster();
 // Player.raycast(raycaster);
 scene.add(Player);
 
 // Mobs
+const mobMap = textureLoader.load("RedInvader.png");
+const mobMaterial = new THREE.SpriteMaterial({ map: mobMap });
+
+const mobNumber = 10;
+const mobSize = 0.5;
+
+for (let index = 0; index < mobNumber; index++) {
+  const Mobs = new THREE.Sprite(mobMaterial);
+  Mobs.scale.set(0.5, 0.5, 1);
+
+  scene.add(Mobs);
+
+  Mobs.position.set(-2.25 + index / 2, 5, 0);
+}
+for (let j = 0; j < mobNumber; j++) {
+  const Mobs = new THREE.Sprite(mobMaterial);
+
+  scene.add(Mobs);
+  Mobs.position.set(-2.25 + j / 2, 4.5, 0);
+  Mobs.scale.set(0.5, 0.5, 1);
+}
+for (let k = 0; k < mobNumber; k++) {
+  const Mobs = new THREE.Sprite(mobMaterial);
+
+  scene.add(Mobs);
+  Mobs.position.set(-2.25 + k / 2, 5.5, 0);
+  Mobs.scale.set(0.5, 0.5, 1);
+}
 
 // const playerGeo = new THREE.PlaneGeometry(0.2, 0.1);
 // const playerMat = new THREE.MeshPhongMaterial({
