@@ -53,15 +53,15 @@ document.querySelector("#app").appendChild(renderer.domElement);
 /**
  * Components
  */
-const planeSize = 40;
+const planeSize = 21;
 
-const planeTexture = textureLoader.load("checker.png");
+const planeTexture = textureLoader.load("background.png");
 planeTexture.wrapS = THREE.RepeatWrapping;
 planeTexture.wrapT = THREE.RepeatWrapping;
 planeTexture.magFilter = THREE.NearestFilter;
 
-const repeats = planeSize / 2;
-planeTexture.repeat.set(repeats, repeats);
+const repeats = planeSize;
+//planeTexture.repeat.set(repeats, repeats);
 
 const planeGeo = new THREE.PlaneGeometry(planeSize, planeSize);
 const planeMat = new THREE.MeshPhongMaterial({
@@ -71,6 +71,7 @@ const planeMat = new THREE.MeshPhongMaterial({
 const plane = new THREE.Mesh(planeGeo, planeMat);
 //plane.rotation.x = Math.PI * -0.5;
 plane.position.z = -2;
+plane.position.y = 1;
 scene.add(plane);
 
 // Player
@@ -99,6 +100,8 @@ const Player = new THREE.Sprite(material);
 const raycaster = new THREE.Raycaster();
 // Player.raycast(raycaster);
 scene.add(Player);
+
+// Mobs
 
 // const playerGeo = new THREE.PlaneGeometry(0.2, 0.1);
 // const playerMat = new THREE.MeshPhongMaterial({
